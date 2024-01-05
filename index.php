@@ -16,17 +16,18 @@ function whatIsHappening() {
     echo '<h2>$_SESSION</h2>';
     var_dump($_SESSION);
 }
+$city = $email = $street = $zipcode = $streetnumber = "";
 
 $products = [
-    ['Jungle-Hut' => 'Your kittens favorite place', 'price' => 75,50],
-    ['Purrchitecture Palace' => 'Palace of kitties dreams', 'price' => 60],
-    ['Climb-a-lot Condo' => 'Climb like a tiger', 'price' => 30],
-    ['Whisker Haven Hideaway' => 'A cozy retreat', 'price' => 80],
-    ['Catnap Nook Shelves' => 'Designed for the perfect catnap', 'price' => 30],
-    ['Kitty Cloud Climb' => 'Soar among the clouds', 'price' => 110],
-    ['Scratch-a-Sky Sanctuary' => 'Heavenly haven for scratching', 'price' => 90],
-    ['Paw-some Wall Playland' => 'Turn your walls into an interactive playland', 'price' => 125,00],
-    ['Feline Fortress Fixture' => 'Fortress of fun and comfort', 'price' => 25],
+    ['name' => 'Jungle Hut', 'price' => 75,50],
+    ['name' => 'Purrchitecture Palace', 'price' => 60],
+    ['name' => 'Climb-a-lot Condo', 'price' => 30],
+    ['name' => 'Whisker Haven Hideaway', 'price' => 80],
+    ['name' => 'Catnap Nook Shelves', 'price' => 30],
+    ['name' => 'Kitty Cloud Climb', 'price' => 110],
+    ['name' => 'Scratch-a-Sky Sanctuary', 'price' => 90],
+    ['name' => 'Paw-some Wall Playland', 'price' => 125,00],
+    ['name' => 'Feline Fortress Fixture', 'price' => 25],
 ];
 
 $totalValue = 0;
@@ -34,7 +35,36 @@ $totalValue = 0;
 function validate()
 {
     // TODO: This function will send a list of invalid fields back
-    return [];
+    $errors = [];
+
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    //validate email
+    if (empty($_POST["email"]) || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+      $errors[] = "Please enter a valid email";
+    }
+    // validate address fields
+    $addressFields = ['street', 'streetnumber', 'city', 'zipcode'];
+    foreach ($addressFields as $field){
+      if (empty($formData[$field])) {
+        $errors[$field] = ucfirst($field). 'is required';
+      }
+    }
+    // validate zip code (only numbers)
+    $zipCode = $_POST["zipcode"];
+    if (empty($zipCode) || !is_numeric($zipCode)) {
+        $errors[] = "Enter a valid zipcode in numbers please";
+    }
+
+   // Check product selection
+    if (empty($_POST["products"])) {
+      $errors[] = "Select a product first";
+    }
+  
+
+  }
+    // add more rules as needed
+    return $errors;
+
 }
 
 function handleForm()
