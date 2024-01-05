@@ -1,8 +1,4 @@
 <?php
-
-// This file is your starting point (= since it's the index)
-// It will contain most of the logic, to prevent making a messy mix in the html
-
 // This line makes PHP behave in a more strict way
 declare(strict_types=1);
 
@@ -21,9 +17,16 @@ function whatIsHappening() {
     var_dump($_SESSION);
 }
 
-// TODO: provide some products (you may overwrite the example)
 $products = [
-    ['name' => 'Your favourite drink', 'price' => 2.5],
+    ['Jungle-Hut' => 'Your kittens favorite place', 'price' => 75,50],
+    ['Purrchitecture Palace' => 'Palace of kitties dreams', 'price' => 60],
+    ['Climb-a-lot Condo' => 'Climb like a tiger', 'price' => 30],
+    ['Whisker Haven Hideaway' => 'A cozy retreat', 'price' => 80],
+    ['Catnap Nook Shelves' => 'Designed for the perfect catnap', 'price' => 30],
+    ['Kitty Cloud Climb' => 'Soar among the clouds', 'price' => 110],
+    ['Scratch-a-Sky Sanctuary' => 'Heavenly haven for scratching', 'price' => 90],
+    ['Paw-some Wall Playland' => 'Turn your walls into an interactive playland', 'price' => 125,00],
+    ['Feline Fortress Fixture' => 'Fortress of fun and comfort', 'price' => 25],
 ];
 
 $totalValue = 0;
