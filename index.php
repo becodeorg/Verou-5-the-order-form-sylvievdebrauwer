@@ -35,29 +35,29 @@ $totalValue = 0;
 function validate()
 {
     // TODO: This function will send a list of invalid fields back
-    $errors = [];
+    $invalidFields = [];
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //validate email
     if (empty($_POST["email"]) || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
-      $errors[] = "Please enter a valid email";
+      $invalidFields[] = "Please enter a valid email";
     }
     // validate address fields
     $addressFields = ['street', 'streetnumber', 'city', 'zipcode'];
     foreach ($addressFields as $field){
       if (empty($formData[$field])) {
-        $errors[$field] = ucfirst($field). 'is required';
+        $invalidFields[$field] = ucfirst($field). 'is required';
       }
     }
     // validate zip code (only numbers)
     $zipCode = $_POST["zipcode"];
     if (empty($zipCode) || !is_numeric($zipCode)) {
-        $errors[] = "Enter a valid zipcode in numbers please";
+        $invalidFields[] = "Enter a valid zipcode in numbers please";
     }
 
    // Check product selection
     if (empty($_POST["products"])) {
-      $errors[] = "Select a product first";
+      $invalidFields[] = "Select a product first";
     }
   
 
@@ -77,12 +77,32 @@ function handleForm()
         // TODO: handle errors
     } else {
         // TODO: handle successful submission
+        // process order, save to database
+
+        //display order confirmation
+        echo '<div class="confirmation">';
+        echo '<h2>Order Confirmation</h2>';
+
+        //display chosen products
+        echo '<p>Chosen Products:</p>';
+        if (!empty($_POST['products'])) {
+          echo '<ul>';
+          foreach ($_POST['products'] as $productId => $value) {
+            $productName = $products[$productId]['name'];
+            $productPrice = $products[$productId]['price'];
+            echo '<li>' . $productName . ' -&euro;' . number_format($productPrice,2) . '</li>';
+          }
+          echo '</ul>';
+        } else {
+          echo '<p>No products selected</p>';
+        }
+        
     }
 }
 
 // TODO: replace this if by an actual check for the form to be submitted
-$formSubmitted = false;
-if ($formSubmitted) {
+// $formSubmitted = false;
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     handleForm();
 }
 
