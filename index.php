@@ -2,6 +2,10 @@
 // This line makes PHP behave in a more strict way
 declare(strict_types=1);
 
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
 // We are going to use session variables so we need to enable sessions
 session_start();
 
@@ -45,7 +49,7 @@ function validate()
     // validate address fields
     $addressFields = ['street', 'streetnumber', 'city', 'zipcode'];
     foreach ($addressFields as $field){
-      if (empty($formData[$field])) {
+      if (empty($_POST[$field])) {
         $invalidFields[$field] = ucfirst($field). 'is required';
       }
     }
@@ -60,20 +64,29 @@ function validate()
       $invalidFields[] = "Select a product first";
     }
   
-
   }
     // add more rules as needed
-    return $errors;
-
+    return $invalidFields;
 }
 
 function handleForm()
 {
+  global $products;
+  $totalValue = 0;
     // TODO: form related tasks (step 1)
 
     // Validation (step 2)
     $invalidFields = validate();
     if (!empty($invalidFields)) {
+      echo '<div class="alert alert-danger" role="alert">';
+      echo '<h4 class="alert-heading"> Validation Errors:</h4>';
+      echo '<ul>';
+      foreach ($invalidFields as $error) {
+        echo '<li>' . $error . '</li>';
+      }
+      echo '</ul>';
+      echo '</div>';
+
         // TODO: handle errors
     } else {
         // TODO: handle successful submission
@@ -96,6 +109,21 @@ function handleForm()
         } else {
           echo '<p>No products selected</p>';
         }
+
+        // display delivery address
+        echo '<p>Delivery Address:</p>';
+        echo '<ul>';
+        echo '<li>Email: ' . htmlspecialchars($_POST['email']) . '</li>';
+        echo '<li>Street: ' . htmlspecialchars($_POST['street']) . '</li>';
+        echo '<li>Street Number: ' . htmlspecialchars($_POST['streetnumber']) . '</li>';
+        echo '<li>City: ' . htmlspecialchars($_POST['city']) . '</li>';
+        echo '<li>Zip Code: ' . htmlspecialchars($_POST['zipcode']) . '</li>';
+        echo '</ul>';
+
+        //display total value
+        echo '<p>Total Order Value: &euro;' . number_format($totalValue, 2) . '</p>';
+
+        echo '</div>';
         
     }
 }
